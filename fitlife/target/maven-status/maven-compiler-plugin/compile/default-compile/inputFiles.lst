@@ -2,14 +2,17 @@
 /home/salva/FItLIfe/fitlife/src/main/java/com/fitlife/bd/ConexionBD.java
 /home/salva/FItLIfe/fitlife/src/main/java/com/fitlife/classes/Progreso.java
 /home/salva/FItLIfe/fitlife/src/main/java/com/fitlife/classes/Rutina.java
+/home/salva/FItLIfe/fitlife/src/main/java/com/fitlife/classes/RutinaCompletada.java
 /home/salva/FItLIfe/fitlife/src/main/java/com/fitlife/classes/RutinaDia.java
 /home/salva/FItLIfe/fitlife/src/main/java/com/fitlife/classes/Usuario.java
 /home/salva/FItLIfe/fitlife/src/main/java/com/fitlife/dao/ProgresoDAO.java
+/home/salva/FItLIfe/fitlife/src/main/java/com/fitlife/dao/RutinaCompletadaDAO.java
 /home/salva/FItLIfe/fitlife/src/main/java/com/fitlife/dao/RutinaDAO.java
 /home/salva/FItLIfe/fitlife/src/main/java/com/fitlife/dao/RutinaDiaDAO.java
 /home/salva/FItLIfe/fitlife/src/main/java/com/fitlife/dao/UsuarioDAO.java
 /home/salva/FItLIfe/fitlife/src/main/java/com/fitlife/servlets/AgregarProgresoServlet.java
 /home/salva/FItLIfe/fitlife/src/main/java/com/fitlife/servlets/AsignarRutinaServlet.java
+/home/salva/FItLIfe/fitlife/src/main/java/com/fitlife/servlets/CompletarRutinaServlet.java
 /home/salva/FItLIfe/fitlife/src/main/java/com/fitlife/servlets/EditarPerfilServlet.java
 /home/salva/FItLIfe/fitlife/src/main/java/com/fitlife/servlets/ListarProgresosServlet.java
 /home/salva/FItLIfe/fitlife/src/main/java/com/fitlife/servlets/LoginServlet.java

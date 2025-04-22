@@ -1,5 +1,6 @@
 com/fitlife/dao/RutinaDiaDAO.class
 com/fitlife/classes/Progreso.class
+com/fitlife/servlets/CompletarRutinaServlet.class
 com/fitlife/classes/RutinaDia.class
 com/fitlife/classes/Rutina.class
 com/fitlife/servlets/LogoutServlet.class
@@ -14,9 +15,11 @@ com/fitlife/utils/NutricionUtil.class
 com/fitlife/servlets/RecuperarContrasenaServlet.class
 com/fitlife/dao/ProgresoDAO.class
 com/fitlife/servlets/RecuperarContrasenaServlet$1.class
+com/fitlife/servlets/CompletarRutinaServlet$1.class
 com/fitlife/servlets/AsignarRutinaServlet.class
 com/fitlife/servlets/AgregarProgresoServlet.class
 com/fitlife/servlets/RegistroUsuarioServlet.class
+com/fitlife/dao/RutinaCompletadaDAO.class
 com/fitlife/servlets/RestablecerContrasenaServlet.class
 com/fitlife/bd/ConexionBD.class
 com/fitlife/utils/SeguridadUtil.class
@@ -24,4 +27,5 @@ com/fitlife/servlets/VerRutinasServlet.class
 com/fitlife/dao/UsuarioDAO.class
 com/fitlife/servlets/ObjetivosDelDiaServlet$1.class
 com/fitlife/servlets/LoginServlet.class
+com/fitlife/classes/RutinaCompletada.class
 com/fitlife/dao/RutinaDAO.class

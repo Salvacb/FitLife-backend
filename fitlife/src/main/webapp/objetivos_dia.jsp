@@ -2,6 +2,7 @@
 <%@ page import="com.fitlife.classes.Usuario" %>
 <%@ page import="com.fitlife.classes.Rutina" %>
 <%@ page import="com.fitlife.classes.RutinaDia" %>
+<%@ page import="com.fitlife.dao.RutinaCompletadaDAO" %>
 
 <html>
 <head>
@@ -34,6 +35,27 @@
     <p><strong>Rutina:</strong> <%= rutina.getNombre() %> (<%= rutina.getNivel() %>)</p>
     <p><strong>Ejercicio de hoy:</strong></p>
     <p><%= ejercicioDelDia.getDescripcion() %></p>
+
+    <%
+        // Verificar si ya completó la rutina hoy
+        boolean yaCompletado = RutinaCompletadaDAO.yaCompletadoHoy(
+            usuario.getId(), rutina.getId(), nombreDia
+        );
+        if (!yaCompletado) {
+    %>
+        <form method="post" action="completarRutina">
+            <button type="submit">✅ Marcar rutina como completada</button>
+        </form>
+    <%
+        } else {
+    %>
+        <p style="color: green; font-weight: bold;">
+            🎉 ¡Ya has completado tu rutina de hoy!
+        </p>
+    <%
+        }
+    %>
+
 <%
     } else {
 %>
