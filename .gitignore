@@ -1,0 +1,9 @@
+/target/
+*.log
+*.class
+*.war
+*.iml
+.idea/
+*.db
+*.mv.db
+*.trace.db
