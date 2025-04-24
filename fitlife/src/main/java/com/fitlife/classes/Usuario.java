@@ -1,5 +1,7 @@
 package com.fitlife.classes;
 
+import com.fitlife.enums.NivelActividad;
+
 public class Usuario {
     private int id;
     private String nombre;
@@ -10,7 +12,7 @@ public class Usuario {
     private int edad;
     private double peso;
     private double altura;
-    private String nivelActividad;
+    private NivelActividad nivelActividad;
     private String objetivo;
     private String sexo;
 
@@ -23,7 +25,6 @@ public class Usuario {
         this.password = password;
     }
 
-    // Getters y setters para los campos nuevos
     public int getEdad() {
         return edad;
     }
@@ -31,7 +32,7 @@ public class Usuario {
     public void setEdad(int edad) {
         this.edad = edad;
     }
-
+ // Getters y setters para los campos nuevos
     public double getPeso() {
         return peso;
     }
@@ -48,14 +49,14 @@ public class Usuario {
         this.altura = altura;
     }
 
-    public String getNivelActividad() {
+    public NivelActividad getNivelActividad() {
         return nivelActividad;
     }
-
-    public void setNivelActividad(String nivelActividad) {
+    
+    public void setNivelActividad(NivelActividad nivelActividad) {
         this.nivelActividad = nivelActividad;
-    }
-
+    }    
+    
     public String getObjetivo() {
         return objetivo;
     }

@@ -2,6 +2,7 @@ package com.fitlife.servlets;
 
 import com.fitlife.classes.Usuario;
 import com.fitlife.dao.UsuarioDAO;
+import com.fitlife.enums.NivelActividad;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -45,7 +46,13 @@ public class EditarPerfilServlet extends HttpServlet {
             usuario.setEdad(Integer.parseInt(request.getParameter("edad")));
             usuario.setPeso(Double.parseDouble(request.getParameter("peso")));
             usuario.setAltura(Double.parseDouble(request.getParameter("altura")));
-            usuario.setNivelActividad(request.getParameter("nivelActividad"));
+            String nivelActividadParam = request.getParameter("nivelActividad");
+            if (nivelActividadParam != null && !nivelActividadParam.isEmpty()) {
+                usuario.setNivelActividad(NivelActividad.valueOf(nivelActividadParam));
+            } else {
+                usuario.setNivelActividad(null); 
+            }
+
             usuario.setObjetivo(request.getParameter("objetivo"));
 
             boolean actualizado = UsuarioDAO.actualizarUsuario(usuario);

@@ -11,10 +11,10 @@ public class ProgresoDAO {
 
     public static boolean guardarProgreso(Progreso progreso) {
         String sqlInsert = "INSERT INTO progresos (usuario_id, fecha, peso, calorias, observaciones) " +
-                           "VALUES (?, ?, ?, ?, ?)";
+                "VALUES (?, ?, ?, ?, ?)";
 
         try (Connection conn = ConexionBD.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sqlInsert, Statement.RETURN_GENERATED_KEYS)) {
+                PreparedStatement stmt = conn.prepareStatement(sqlInsert, Statement.RETURN_GENERATED_KEYS)) {
 
             stmt.setInt(1, progreso.getUsuarioId());
             stmt.setDate(2, progreso.getFecha());
@@ -36,8 +36,8 @@ public class ProgresoDAO {
                     Progreso ultimoProgreso = obtenerUltimoProgreso(progreso.getUsuarioId());
 
                     if (ultimoProgreso != null &&
-                        progreso.getFecha().equals(ultimoProgreso.getFecha()) &&
-                        progresoIdInsertado == ultimoProgreso.getId()) {
+                            progreso.getFecha().equals(ultimoProgreso.getFecha()) &&
+                            progresoIdInsertado == ultimoProgreso.getId()) {
 
                         System.out.println("[INFO] Es el progreso más reciente. Se actualizará el peso del perfil.");
                         actualizarPesoUsuario(progreso.getUsuarioId(), progreso.getPeso());
@@ -62,7 +62,7 @@ public class ProgresoDAO {
         String sql = "SELECT * FROM progresos WHERE usuario_id = ? ORDER BY fecha DESC, id DESC LIMIT 1";
 
         try (Connection conn = ConexionBD.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setInt(1, usuarioId);
             ResultSet rs = stmt.executeQuery();
@@ -90,7 +90,7 @@ public class ProgresoDAO {
         String sql = "UPDATE usuarios SET peso = ? WHERE id = ?";
 
         try (Connection conn = ConexionBD.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setDouble(1, nuevoPeso);
             stmt.setInt(2, usuarioId);
@@ -108,7 +108,7 @@ public class ProgresoDAO {
         String sql = "SELECT * FROM progresos WHERE usuario_id = ? ORDER BY fecha DESC";
 
         try (Connection conn = ConexionBD.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setInt(1, usuarioId);
             ResultSet rs = stmt.executeQuery();
@@ -130,4 +130,33 @@ public class ProgresoDAO {
 
         return lista;
     }
+
+    public static List<Progreso> obtenerProgresosPorUsuarioPeriodo(int usuarioId, Date desde, Date hasta) {
+        List<Progreso> lista = new ArrayList<>();
+        String sql = "SELECT * FROM progresos WHERE usuario_id = ? AND fecha BETWEEN ? AND ? ORDER BY fecha ASC";
+
+        try (Connection conn = ConexionBD.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, usuarioId);
+            stmt.setDate(2, desde);
+            stmt.setDate(3, hasta);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                Progreso p = new Progreso();
+                p.setId(rs.getInt("id"));
+                p.setUsuarioId(usuarioId);
+                p.setFecha(rs.getDate("fecha"));
+                p.setPeso(rs.getDouble("peso"));
+                p.setCalorias(rs.getInt("calorias"));
+                p.setObservaciones(rs.getString("observaciones"));
+                lista.add(p);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return lista;
+    }
+
 }

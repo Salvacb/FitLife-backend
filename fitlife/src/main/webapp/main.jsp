@@ -17,9 +17,13 @@
         <li><a href="perfil">Ver Perfil</a></li>
         <li><a href="agregar_progreso.jsp">📈 Registrar Progreso</a></li>
         <li><a href="listarProgresos">📃 Ver Historial de Progreso</a></li>
-        <li><a href="verRutinaActual">🏋️ Ver Rutina Asignada</a></li> <!-- 🆕 -->
-        <li><a href="verRutinas">📋 Ver y Seleccionar Rutina</a></li> <!-- 🆕 -->
+        <li><a href="verRutinaActual">🏋️ Ver Rutina Asignada</a></li> 
+        <li><a href="verRutinas">📋 Ver y Seleccionar Rutina</a></li> 
         <li><a href="objetivosDia">🎯 Objetivos del Día</a></li>
+        <li><a href="registar_comida.jsp">Registrar Comida</a></li>
+        <li><a href="listarComidas">📋 Ver comidas de hoy</a></li>
+        <li><a href="desafios">Ver Desafíos</a></li>
+        <li><a href="misDesafios">Mis Desafíos</a></li>
     </ul>
 
     <form action="logout" method="post">

@@ -2,6 +2,7 @@ package com.fitlife.dao;
 
 import com.fitlife.bd.ConexionBD;
 import com.fitlife.classes.Usuario;
+import com.fitlife.enums.NivelActividad;
 import com.fitlife.utils.SeguridadUtil;
 
 import java.sql.*;
@@ -20,8 +21,7 @@ public class UsuarioDAO {
         }
 
         String sql = "INSERT INTO usuarios (nombre, email, password, edad, peso, altura, nivel_actividad, objetivo, sexo) " +
-        "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-
+                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = ConexionBD.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -32,7 +32,7 @@ public class UsuarioDAO {
             stmt.setInt(4, usuario.getEdad());
             stmt.setDouble(5, usuario.getPeso());
             stmt.setDouble(6, usuario.getAltura());
-            stmt.setString(7, usuario.getNivelActividad());
+            stmt.setString(7, usuario.getNivelActividad() != null ? usuario.getNivelActividad().name() : null); 
             stmt.setString(8, usuario.getObjetivo());
             stmt.setString(9, usuario.getSexo());
 
@@ -69,9 +69,14 @@ public class UsuarioDAO {
                 usuario.setEdad(rs.getInt("edad"));
                 usuario.setPeso(rs.getDouble("peso"));
                 usuario.setAltura(rs.getDouble("altura"));
-                usuario.setNivelActividad(rs.getString("nivel_actividad"));
+
+                String nivelActividadDb = rs.getString("nivel_actividad");
+                if (nivelActividadDb != null) {
+                    usuario.setNivelActividad(NivelActividad.fromString(rs.getString("nivel_actividad")));
+                }
+
                 usuario.setObjetivo(rs.getString("objetivo"));
-                usuario.setSexo(rs.getString("sexo")); // 🆕
+                usuario.setSexo(rs.getString("sexo"));
 
                 return usuario;
             } else {
@@ -103,8 +108,14 @@ public class UsuarioDAO {
                 usuario.setEdad(rs.getInt("edad"));
                 usuario.setPeso(rs.getDouble("peso"));
                 usuario.setAltura(rs.getDouble("altura"));
-                usuario.setNivelActividad(rs.getString("nivel_actividad"));
+
+                String nivelActividadDb = rs.getString("nivel_actividad");
+                if (nivelActividadDb != null) {
+                    usuario.setNivelActividad(NivelActividad.valueOf(nivelActividadDb));
+                }
+
                 usuario.setObjetivo(rs.getString("objetivo"));
+                usuario.setSexo(rs.getString("sexo"));
                 lista.add(usuario);
             }
 
@@ -124,7 +135,7 @@ public class UsuarioDAO {
             stmt.setInt(1, usuario.getEdad());
             stmt.setDouble(2, usuario.getPeso());
             stmt.setDouble(3, usuario.getAltura());
-            stmt.setString(4, usuario.getNivelActividad());
+            stmt.setString(4, usuario.getNivelActividad() != null ? usuario.getNivelActividad().name() : null);
             stmt.setString(5, usuario.getObjetivo());
             stmt.setString(6, usuario.getEmail());
 
