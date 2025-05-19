@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-
+import android.content.Intent;
 import com.example.fitlifeapp.LoginPresenter;
 import com.example.fitlifeapp.LoginPresenterImpl;
 import androidx.appcompat.app.AppCompatActivity;
@@ -25,6 +25,8 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
         emailEditText = findViewById(R.id.emailEditText);
         passwordEditText = findViewById(R.id.passwordEditText);
         Button loginButton = findViewById(R.id.loginButton);
+        Button registerLink = findViewById(R.id.registerLink);
+
 
         presenter = new LoginPresenterImpl(this);
 
@@ -33,6 +35,15 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
             String password = passwordEditText.getText().toString();
             presenter.login(email, password);
         });
+
+
+        registerLink.setOnClickListener(v -> {
+            Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+            startActivity(intent);
+        });
+
+
+
     }
 
     @Override
