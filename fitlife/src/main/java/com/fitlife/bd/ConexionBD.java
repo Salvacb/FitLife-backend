@@ -6,7 +6,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class ConexionBD {
-    private static final String URL = "jdbc:h2:file:/home/salva/fitlife_db";
+    private static final String URL = "jdbc:h2:file:/Users/psola/Desktop/IITV/3º/PDM/fitlife_db";
     private static final String USER = "sa";
     private static final String PASS = "";
 
