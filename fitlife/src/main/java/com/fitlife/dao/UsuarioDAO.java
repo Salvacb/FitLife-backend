@@ -20,7 +20,7 @@ public class UsuarioDAO {
             return false;
         }
 
-        String sql = "INSERT INTO usuarios (nombre, email, password, edad, peso, altura, nivel_actividad, objetivo, sexo) " +
+        String sql = "INSERT INTO USUARIOS (nombre, email, password, edad, peso, altura, nivel_actividad, objetivo, sexo) " +
                      "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = ConexionBD.getConnection();
@@ -50,7 +50,7 @@ public class UsuarioDAO {
     public static Usuario buscarPorEmail(String email) {
         System.out.println("[DEBUG] Buscando usuario con email: " + email);
 
-        String sql = "SELECT * FROM usuarios WHERE email = ?";
+        String sql = "SELECT * FROM USUARIOS WHERE email = ?";
 
         try (Connection conn = ConexionBD.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -93,7 +93,7 @@ public class UsuarioDAO {
 
     public static List<Usuario> getUsuarios() {
         List<Usuario> lista = new ArrayList<>();
-        String sql = "SELECT * FROM usuarios";
+        String sql = "SELECT * FROM USUARIOS";
 
         try (Connection conn = ConexionBD.getConnection();
              Statement stmt = conn.createStatement();
@@ -127,7 +127,7 @@ public class UsuarioDAO {
     }
 
     public static boolean actualizarUsuario(Usuario usuario) {
-        String sql = "UPDATE usuarios SET edad = ?, peso = ?, altura = ?, nivel_actividad = ?, objetivo = ? WHERE email = ?";
+        String sql = "UPDATE USUARIOS SET edad = ?, peso = ?, altura = ?, nivel_actividad = ?, objetivo = ? WHERE email = ?";
 
         try (Connection conn = ConexionBD.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
