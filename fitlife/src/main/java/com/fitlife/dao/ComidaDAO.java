@@ -10,7 +10,7 @@ import java.util.List;
 public class ComidaDAO {
 
     public static boolean guardarComida(Comida c) {
-        String sql = "INSERT INTO comidas (usuario_id, fecha, nombre, calorias, carbohidratos, proteinas, grasas, observaciones) " +
+        String sql = "INSERT INTO COMIDAS (usuario_id, fecha, nombre, calorias, carbohidratos, proteinas, grasas, observaciones) " +
                      "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = ConexionBD.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -33,7 +33,7 @@ public class ComidaDAO {
 
     public static List<Comida> obtenerPorUsuarioYFecha(int usuarioId, Date fecha) {
         List<Comida> lista = new ArrayList<>();
-        String sql = "SELECT * FROM comidas WHERE usuario_id = ? AND fecha = ? ORDER BY id";
+        String sql = "SELECT * FROM COMIDAS WHERE usuario_id = ? AND fecha = ? ORDER BY id";
         try (Connection conn = ConexionBD.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
@@ -60,7 +60,7 @@ public class ComidaDAO {
     }
 
     public static int totalCalorias(int usuarioId, Date fecha) {
-        String sql = "SELECT SUM(calorias) as total FROM comidas WHERE usuario_id = ? AND fecha = ?";
+        String sql = "SELECT SUM(calorias) as total FROM COMIDAS WHERE usuario_id = ? AND fecha = ?";
         try (Connection conn = ConexionBD.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 

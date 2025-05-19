@@ -8,7 +8,7 @@ import java.sql.Date;
 
 public class ParticipacionDAO {
     public static boolean unirse(int usuarioId, int desafioId) {
-        String sql = "INSERT INTO participaciones (usuario_id, desafio_id, fecha_join) VALUES (?,?,?)";
+        String sql = "INSERT INTO PARTICIPACIONES (usuario_id, desafio_id, fecha_join) VALUES (?,?,?)";
         try (Connection c = ConexionBD.getConnection();
              PreparedStatement p = c.prepareStatement(sql)) {
             p.setInt(1, usuarioId);
@@ -20,7 +20,7 @@ public class ParticipacionDAO {
     }
 
     public static boolean abandonar(int usuarioId, int desafioId) {
-        String sql = "DELETE FROM participaciones WHERE usuario_id=? AND desafio_id=?";
+        String sql = "DELETE FROM PARTICIPACIONES WHERE usuario_id=? AND desafio_id=?";
         try (Connection c = ConexionBD.getConnection();
              PreparedStatement p = c.prepareStatement(sql)) {
             p.setInt(1, usuarioId);
@@ -32,7 +32,7 @@ public class ParticipacionDAO {
 
     public static List<Participacion> listarPorUsuario(int usuarioId) {
         List<Participacion> lista = new ArrayList<>();
-        String sql = "SELECT * FROM participaciones WHERE usuario_id=? ORDER BY fecha_join";
+        String sql = "SELECT * FROM PARTICIPACIONES WHERE usuario_id=? ORDER BY fecha_join";
         try (Connection c = ConexionBD.getConnection();
              PreparedStatement p = c.prepareStatement(sql)) {
             p.setInt(1, usuarioId);
@@ -51,7 +51,7 @@ public class ParticipacionDAO {
     }
 
     public static boolean marcarCompletado(int usuarioId, int desafioId) {
-        String sql = "UPDATE participaciones SET completado=TRUE WHERE usuario_id=? AND desafio_id=?";
+        String sql = "UPDATE PARTICIPACIONES SET completado=TRUE WHERE usuario_id=? AND desafio_id=?";
         try (Connection c = ConexionBD.getConnection();
              PreparedStatement p = c.prepareStatement(sql)) {
             p.setInt(1, usuarioId);

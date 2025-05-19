@@ -10,7 +10,7 @@ import java.util.List;
 public class ProgresoDAO {
 
     public static boolean guardarProgreso(Progreso progreso) {
-        String sqlInsert = "INSERT INTO progresos (usuario_id, fecha, peso, calorias, observaciones) " +
+        String sqlInsert = "INSERT INTO PROGRESOS (usuario_id, fecha, peso, calorias, observaciones) " +
                 "VALUES (?, ?, ?, ?, ?)";
 
         try (Connection conn = ConexionBD.getConnection();
@@ -59,7 +59,7 @@ public class ProgresoDAO {
 
     // 🟠 Obtener el progreso más reciente (por fecha y luego id DESC)
     private static Progreso obtenerUltimoProgreso(int usuarioId) {
-        String sql = "SELECT * FROM progresos WHERE usuario_id = ? ORDER BY fecha DESC, id DESC LIMIT 1";
+        String sql = "SELECT * FROM PROGRESOS WHERE usuario_id = ? ORDER BY fecha DESC, id DESC LIMIT 1";
 
         try (Connection conn = ConexionBD.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -105,7 +105,7 @@ public class ProgresoDAO {
 
     public static List<Progreso> obtenerProgresosPorUsuario(int usuarioId) {
         List<Progreso> lista = new ArrayList<>();
-        String sql = "SELECT * FROM progresos WHERE usuario_id = ? ORDER BY fecha DESC";
+        String sql = "SELECT * FROM PROGRESOS WHERE usuario_id = ? ORDER BY fecha DESC";
 
         try (Connection conn = ConexionBD.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -133,7 +133,7 @@ public class ProgresoDAO {
 
     public static List<Progreso> obtenerProgresosPorUsuarioPeriodo(int usuarioId, Date desde, Date hasta) {
         List<Progreso> lista = new ArrayList<>();
-        String sql = "SELECT * FROM progresos WHERE usuario_id = ? AND fecha BETWEEN ? AND ? ORDER BY fecha ASC";
+        String sql = "SELECT * FROM PROGRESOS WHERE usuario_id = ? AND fecha BETWEEN ? AND ? ORDER BY fecha ASC";
 
         try (Connection conn = ConexionBD.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(sql)) {
