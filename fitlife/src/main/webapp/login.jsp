@@ -1,41 +1,51 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="com.fitlife.classes.Usuario" %>
-<html>
+<%
+    // Context path para URLs dinámicas
+    String context = request.getContextPath();
+    // Usuario en sesión (si ya inició sesión)
+    Usuario usuario = (Usuario) session.getAttribute("usuario");
+    // Mensaje informativo (registrado en request por el servlet)
+    String mensaje = (String) request.getAttribute("mensaje");
+%>
+<!DOCTYPE html>
+<html lang="es">
 <head>
-    <title>Iniciar Sesión</title>
+    <meta charset="UTF-8">
+    <title>Iniciar Sesión – FitLife</title>
 </head>
 <body>
 
-<%
-    Usuario usuario = (Usuario) session.getAttribute("usuario");
-    if (usuario != null) {
-%>
+<% if (usuario != null) { %>
+    <!-- Usuario ya logueado -->
     <p>👋 Bienvenido, <strong><%= usuario.getNombre() %></strong></p>
-    <form action="logout" method="post">
+    <form action="<%= context %>/logout" method="post">
         <button type="submit">Cerrar sesión</button>
     </form>
-    <p><a href="main.jsp">Ir al panel principal</a></p>
-<%
-    } else {
-%>
+    <p><a href="<%= context %>/main.jsp">Ir al panel principal</a></p>
+
+<% } else { %>
+    <!-- Formulario de login -->
     <h2>Iniciar sesión en FitLife</h2>
 
-    <form method="post" action="login">
-        Email: <input type="email" name="email" required /><br/><br/>
-        Contraseña: <input type="password" name="password" required /><br/><br/>
-        <input type="submit" value="Entrar" />
+    <% if (mensaje != null) { %>
+        <p style="color: green;"><%= mensaje %></p>
+    <% } %>
+
+    <form method="post" action="<%= context %>/login">
+        <label for="email">Email:</label><br/>
+        <input type="email" id="email" name="email" required /><br/><br/>
+
+        <label for="password">Contraseña:</label><br/>
+        <input type="password" id="password" name="password" required /><br/><br/>
+
+        <button type="submit">Entrar</button>
     </form>
 
-    <p>¿No tienes cuenta? <a href="registro.jsp">Regístrate aquí</a></p>
-    <p><a href="recuperar.jsp">¿Olvidaste tu contraseña?</a></p>
-    <p><a href="inicio.jsp">← Volver al inicio</a></p>
-<%
-    }
-%>
-
-<p style="color: green;">
-    <%= request.getAttribute("mensaje") != null ? request.getAttribute("mensaje") : "" %>
-</p>
+    <p>¿No tienes cuenta? <a href="<%= context %>/registro.jsp">Regístrate aquí</a></p>
+    <p><a href="<%= context %>/recuperar.jsp">¿Olvidaste tu contraseña?</a></p>
+    <p><a href="<%= context %>/inicio.jsp">← Volver al inicio</a></p>
+<% } %>
 
 </body>
 </html>
