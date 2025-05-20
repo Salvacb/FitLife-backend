@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- Tema de tu app debe heredar de AppCompat/MaterialComponents -->
+    <style name="Theme.Fitlife" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Aquí tus personalizaciones de colores, tipografías… -->
+        <item name="colorPrimary">@color/purple_500</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <!-- …otros items… -->
+    </style>
+
+</resources>

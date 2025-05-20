@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Fitlife</string>
+    <string-array name="sexo_array">
+        <item>M</item>
+        <item>F</item>
+    </string-array>
+
+    <string name="prompt_nivel_actividad">Selecciona tu nivel de actividad</string>
+</resources>
+
