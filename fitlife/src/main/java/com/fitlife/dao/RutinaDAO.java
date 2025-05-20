@@ -12,7 +12,7 @@ public class RutinaDAO {
     // Obtener todas las rutinas del sistema
     public static List<Rutina> obtenerTodas() {
         List<Rutina> lista = new ArrayList<>();
-        String sql = "SELECT * FROM rutinas";
+        String sql = "SELECT * FROM RUTINAS";
 
         try (Connection conn = ConexionBD.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql);
@@ -38,7 +38,7 @@ public class RutinaDAO {
     public static Rutina obtenerPorUsuarioId(int usuarioId) {
         String sql = """
             SELECT r.*
-            FROM rutinas r
+            FROM RUTINAS r
             JOIN usuario_rutina ur ON r.id = ur.rutina_id
             WHERE ur.usuario_id = ?
         """;

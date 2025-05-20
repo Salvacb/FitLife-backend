@@ -8,7 +8,7 @@ import java.util.*;
 public class DesafioDAO {
     public static List<Desafio> listarTodos() {
         List<Desafio> lista = new ArrayList<>();
-        String sql = "SELECT * FROM desafios ORDER BY fecha_inicio";
+        String sql = "SELECT * FROM DESAFIOS ORDER BY fecha_inicio";
         try (Connection c = ConexionBD.getConnection();
              Statement s = c.createStatement();
              ResultSet rs = s.executeQuery(sql)) {
@@ -26,7 +26,7 @@ public class DesafioDAO {
     }
 
     public static Desafio obtener(int id) {
-        String sql = "SELECT * FROM desafios WHERE id = ?";
+        String sql = "SELECT * FROM DESAFIOS WHERE id = ?";
         try (Connection c = ConexionBD.getConnection();
              PreparedStatement p = c.prepareStatement(sql)) {
             p.setInt(1, id);
@@ -45,7 +45,7 @@ public class DesafioDAO {
     }
 
     public static boolean crear(Desafio d) {
-        String sql = "INSERT INTO desafios (titulo, descripcion, fecha_inicio, fecha_fin) VALUES (?,?,?,?)";
+        String sql = "INSERT INTO DESAFIOS (titulo, descripcion, fecha_inicio, fecha_fin) VALUES (?,?,?,?)";
         try (Connection c = ConexionBD.getConnection();
              PreparedStatement p = c.prepareStatement(sql)) {
             p.setString(1, d.getTitulo());

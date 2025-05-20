@@ -10,7 +10,7 @@ public class RutinaCompletadaDAO {
 
     // Verificar si el usuario ya completó hoy su rutina
     public static boolean yaCompletadoHoy(int usuarioId, int rutinaId, String diaSemana) {
-        String sql = "SELECT COUNT(*) FROM rutinas_completadas WHERE usuario_id = ? AND rutina_id = ? AND fecha = ?";
+        String sql = "SELECT COUNT(*) FROM RUTINAS_COMPLETADAS WHERE usuario_id = ? AND rutina_id = ? AND fecha = ?";
 
         try (Connection conn = ConexionBD.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -34,7 +34,7 @@ public class RutinaCompletadaDAO {
     // Insertar rutina como completada
     public static boolean registrarCompletado(RutinaCompletada rutinaCompletada) {
         String sql = """
-            INSERT INTO rutinas_completadas (usuario_id, rutina_id, fecha, dia_semana, descripcion, completado)
+            INSERT INTO RUTINAS_COMPLETADAS (usuario_id, rutina_id, fecha, dia_semana, descripcion, completado)
             VALUES (?, ?, ?, ?, ?, ?)
         """;
 

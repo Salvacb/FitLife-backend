@@ -1,6 +1,8 @@
+// RestablecerContrasenaServlet.java
 package com.fitlife.servlets;
 
 import com.fitlife.utils.SeguridadUtil;
+import com.fitlife.bd.ConexionBD;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -11,47 +13,51 @@ import java.sql.*;
 @WebServlet("/restablecer")
 public class RestablecerContrasenaServlet extends HttpServlet {
 
-    private final String URL_DB = "jdbc:h2:file:/home/salva/fitlife_db";
-    private final String USER_DB = "sa";
-    private final String PASS_DB = "";
-
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+protected void doGet(HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IOException {
 
-        String token = request.getParameter("token");
+    String token = request.getParameter("token");
+    if (token == null || token.isEmpty()) {
+        response.sendRedirect("inicio.jsp");
+        return;
+    }
 
-        if (token == null || token.isEmpty()) {
-            response.sendRedirect("inicio.jsp");
-            return;
-        }
+    String sql = "SELECT usado FROM TOKENS_RECUPERACION WHERE token = ?";
 
-        try (Connection conn = DriverManager.getConnection(URL_DB, USER_DB, PASS_DB);
-             PreparedStatement stmt = conn.prepareStatement(
-                     "SELECT usado FROM tokens_recuperacion WHERE token = ?")) {
+    try (Connection conn = ConexionBD.getConnection();
+         PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setString(1, token);
-            ResultSet rs = stmt.executeQuery();
+        // 1) Ligamos el parámetro ANTES de ejecutar la consulta
+        stmt.setString(1, token);
 
+        // 2) Ejecutamos y procesamos el ResultSet
+        try (ResultSet rs = stmt.executeQuery()) {
             if (rs.next()) {
                 boolean usado = rs.getBoolean("usado");
                 if (usado) {
                     request.setAttribute("mensaje", "Este enlace ya fue utilizado.");
-                    request.getRequestDispatcher("inicio.jsp").forward(request, response);
+                    request.getRequestDispatcher("inicio.jsp")
+                           .forward(request, response);
                 } else {
                     request.setAttribute("token", token);
-                    request.getRequestDispatcher("restablecer.jsp").forward(request, response);
+                    request.getRequestDispatcher("restablecer.jsp")
+                           .forward(request, response);
                 }
             } else {
+                // no hay token en la tabla
                 request.setAttribute("mensaje", "Token no válido.");
-                request.getRequestDispatcher("inicio.jsp").forward(request, response);
+                request.getRequestDispatcher("inicio.jsp")
+                       .forward(request, response);
             }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            response.sendRedirect("inicio.jsp");
         }
+
+    } catch (SQLException e) {
+        e.printStackTrace();
+        response.sendRedirect("inicio.jsp");
     }
+}
+
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -59,51 +65,53 @@ public class RestablecerContrasenaServlet extends HttpServlet {
 
         String token = request.getParameter("token");
         String nuevaPassword = request.getParameter("password");
-
-        if (token == null || token.isEmpty() || nuevaPassword == null || nuevaPassword.isEmpty()) {
+        if (token == null || token.isEmpty() ||
+            nuevaPassword == null || nuevaPassword.isEmpty()) {
             response.sendRedirect("inicio.jsp");
             return;
         }
 
-        try (Connection conn = DriverManager.getConnection(URL_DB, USER_DB, PASS_DB)) {
+        try (Connection conn = ConexionBD.getConnection()) {
 
-            PreparedStatement stmt = conn.prepareStatement(
-                    "SELECT usuario_id, usado FROM tokens_recuperacion WHERE token = ?");
-            stmt.setString(1, token);
-            ResultSet rs = stmt.executeQuery();
+            // volvemos a usar la tabla en mayúsculas
+            String select = "SELECT usuario_id, usado FROM TOKENS_RECUPERACION WHERE token = ?";
+            try (PreparedStatement stmt = conn.prepareStatement(select)) {
+                stmt.setString(1, token);
+                try (ResultSet rs = stmt.executeQuery()) {
+                    if (rs.next()) {
+                        if (rs.getBoolean("usado")) {
+                            request.setAttribute("mensaje", "Este enlace ya fue utilizado.");
+                            request.getRequestDispatcher("inicio.jsp").forward(request, response);
+                            return;
+                        }
+                        int usuarioId = rs.getInt("usuario_id");
 
-            if (rs.next()) {
-                boolean yaUsado = rs.getBoolean("usado");
-                int usuarioId = rs.getInt("usuario_id");
+                        // Hashear nueva pwd
+                        String hashed = SeguridadUtil.hashearPassword(nuevaPassword);
 
-                if (yaUsado) {
-                    request.setAttribute("mensaje", "Este enlace ya fue utilizado.");
-                    request.getRequestDispatcher("inicio.jsp").forward(request, response);
-                    return;
+                        // Actualiza contraseña
+                        String updPwd = "UPDATE USUARIOS SET password = ? WHERE id = ?";
+                        try (PreparedStatement p2 = conn.prepareStatement(updPwd)) {
+                            p2.setString(1, hashed);
+                            p2.setInt(2, usuarioId);
+                            p2.executeUpdate();
+                        }
+
+                        // Marca token como usado
+                        String updTok = "UPDATE TOKENS_RECUPERACION SET usado = TRUE WHERE token = ?";
+                        try (PreparedStatement p3 = conn.prepareStatement(updTok)) {
+                            p3.setString(1, token);
+                            p3.executeUpdate();
+                        }
+
+                        request.setAttribute("mensaje", "✅ Contraseña restablecida. Inicia sesión.");
+                        request.getRequestDispatcher("login.jsp").forward(request, response);
+                        return;
+                    } else {
+                        request.setAttribute("mensaje", "Token no válido.");
+                        request.getRequestDispatcher("inicio.jsp").forward(request, response);
+                    }
                 }
-
-                // Hashear la nueva contraseña
-                String hashedPassword = SeguridadUtil.hashearPassword(nuevaPassword);
-
-                // Actualizar contraseña
-                PreparedStatement updatePwd = conn.prepareStatement(
-                        "UPDATE usuarios SET password = ? WHERE id = ?");
-                updatePwd.setString(1, hashedPassword);
-                updatePwd.setInt(2, usuarioId);
-                updatePwd.executeUpdate();
-
-                // Marcar token como usado
-                PreparedStatement marcar = conn.prepareStatement(
-                        "UPDATE tokens_recuperacion SET usado = TRUE WHERE token = ?");
-                marcar.setString(1, token);
-                marcar.executeUpdate();
-
-                request.setAttribute("mensaje", "✅ Contraseña restablecida correctamente. Iniciá sesión.");
-                request.getRequestDispatcher("login.jsp").forward(request, response);
-
-            } else {
-                request.setAttribute("mensaje", "Token no válido.");
-                request.getRequestDispatcher("inicio.jsp").forward(request, response);
             }
 
         } catch (SQLException e) {

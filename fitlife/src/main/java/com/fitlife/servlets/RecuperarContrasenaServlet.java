@@ -1,7 +1,9 @@
+// RecuperarContrasenaServlet.java
 package com.fitlife.servlets;
 
 import com.fitlife.classes.Usuario;
 import com.fitlife.dao.UsuarioDAO;
+import com.fitlife.bd.ConexionBD;
 
 import javax.mail.*;
 import javax.mail.internet.*;
@@ -16,9 +18,11 @@ import java.util.UUID;
 @WebServlet("/recuperar")
 public class RecuperarContrasenaServlet extends HttpServlet {
 
-    private final String URL_DB = "jdbc:h2:file:/home/salva/fitlife_db";
-    private final String USER_DB = "sa";
-    private final String PASS_DB = "";
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        request.getRequestDispatcher("recuperar.jsp").forward(request, response);
+    }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -35,16 +39,18 @@ public class RecuperarContrasenaServlet extends HttpServlet {
 
         String token = UUID.randomUUID().toString();
 
-        try (Connection conn = DriverManager.getConnection(URL_DB, USER_DB, PASS_DB);
-             PreparedStatement stmt = conn.prepareStatement(
-                     "INSERT INTO tokens_recuperacion (usuario_id, token) VALUES (?, ?)")) {
+        // Inserta el token en MySQL usando ConexionBD
+        String sql = "INSERT INTO TOKENS_RECUPERACION (usuario_id, token) VALUES (?, ?)";
+        try (Connection conn = ConexionBD.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setInt(1, usuario.getId());
             stmt.setString(2, token);
             stmt.executeUpdate();
 
-            // Enviar correo
-            enviarCorreo(email, token);
+            // ENLACE ESTÁTICO (no tocamos el punto 5)
+            String resetLink = "http://localhost:8080/fitlife-1.0-SNAPSHOT/restablecer?token=" + token;
+            enviarCorreo(email, resetLink);
 
             request.setAttribute("mensaje", "Te hemos enviado un correo con las instrucciones.");
         } catch (SQLException e) {
@@ -55,15 +61,15 @@ public class RecuperarContrasenaServlet extends HttpServlet {
         request.getRequestDispatcher("recuperar.jsp").forward(request, response);
     }
 
-    private void enviarCorreo(String destino, String token) {
-        String remitente = "wordpresssalva@gmail.com"; 
-        String clave = "elpjetlkcfvaljlp";   
+    private void enviarCorreo(String destino, String enlaceRestablecer) {
+        String remitente = "wordpresssalva@gmail.com";
+        String clave     = "elpjetlkcfvaljlp";
 
         Properties props = new Properties();
-        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.auth",            "true");
         props.put("mail.smtp.starttls.enable", "true");
-        props.put("mail.smtp.host", "smtp.gmail.com");
-        props.put("mail.smtp.port", "587");
+        props.put("mail.smtp.host",            "smtp.gmail.com");
+        props.put("mail.smtp.port",            "587");
 
         Session sesion = Session.getInstance(props, new Authenticator() {
             protected PasswordAuthentication getPasswordAuthentication() {
@@ -74,16 +80,20 @@ public class RecuperarContrasenaServlet extends HttpServlet {
         try {
             Message mensaje = new MimeMessage(sesion);
             mensaje.setFrom(new InternetAddress(remitente));
-            mensaje.setRecipients(Message.RecipientType.TO, InternetAddress.parse(destino));
+            mensaje.setRecipients(
+                Message.RecipientType.TO,
+                InternetAddress.parse(destino)
+            );
             mensaje.setSubject("Recupera tu contraseña - FitLife");
-            mensaje.setText("Haz clic en el siguiente enlace para restablecer tu contraseña:\n\n" +
-                    "http://localhost:8080/fitlife-1.0-SNAPSHOT/restablecer?token=" + token);
+            mensaje.setText(
+                "Haz clic en el siguiente enlace para restablecer tu contraseña:\n\n" +
+                enlaceRestablecer
+            );
 
             Transport.send(mensaje);
             System.out.println("[EMAIL] Correo enviado a " + destino);
-
         } catch (MessagingException e) {
-            e.printStackTrace();
+            e.printStackTrace(); // punto 4 sin modificar
         }
     }
 }

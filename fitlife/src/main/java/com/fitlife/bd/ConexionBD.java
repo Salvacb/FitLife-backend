@@ -3,42 +3,32 @@ package com.fitlife.bd;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 public class ConexionBD {
-    private static final String URL = "jdbc:h2:file:/Users/psola/Desktop/IITV/3º/PDM/fitlife_db";
-    private static final String USER = "sa";
-    private static final String PASS = "";
+
+    private static final String URL = "jdbc:mysql://13.61.161.23:3306/fitlife";
+    private static final String USER = "salva";
+    private static final String PASS = "1234";
+
 
     static {
         try {
-            // Registrar el driver manualmente
-            Class.forName("org.h2.Driver");
-    
-            // Crear tabla si no existe
-            Connection conn = getConnection();
-            Statement stmt = conn.createStatement();
-            String sql = """
-                CREATE TABLE IF NOT EXISTS usuarios (
-                    id INT AUTO_INCREMENT PRIMARY KEY,
-                    nombre VARCHAR(100),
-                    email VARCHAR(100) UNIQUE,
-                    password VARCHAR(100),
-                    edad INT,
-                    peso DOUBLE,
-                    altura DOUBLE,
-                    nivel_actividad VARCHAR(50),
-                    objetivo VARCHAR(100)
-                )
-            """;
-            stmt.execute(sql);
-            stmt.close();
-            conn.close();
-        } catch (Exception e) {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            System.out.println("✅ Driver MySQL cargado correctamente.");
+        } catch (ClassNotFoundException e) {
+            System.err.println("❌ Error: Driver MySQL no encontrado.");
+            e.printStackTrace();
+        }
+
+        try (Connection conn = getConnection()) {
+            System.out.println("✅ Conexión a MySQL establecida correctamente.");
+        } catch (SQLException e) {
+            System.err.println("❌ Error al conectar con la base de datos:");
+            System.err.println("URL: " + URL);
+            System.err.println("Usuario: " + USER);
             e.printStackTrace();
         }
     }
-    
 
     public static Connection getConnection() throws SQLException {
         return DriverManager.getConnection(URL, USER, PASS);

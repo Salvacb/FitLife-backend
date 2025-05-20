@@ -5,11 +5,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+
 
 public class RegisterActivity extends AppCompatActivity implements RegisterView {
 
     private EditText emailEditText, passwordEditText;
     private RegisterPresenter presenter;
+    Button  backButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,6 +22,8 @@ public class RegisterActivity extends AppCompatActivity implements RegisterView 
         emailEditText = findViewById(R.id.emailEditText);
         passwordEditText = findViewById(R.id.passwordEditText);
         Button registerButton = findViewById(R.id.registerButton);
+        backButton = findViewById(R.id.backButton);
+
 
         presenter = new RegisterPresenterImpl(this);
 
@@ -27,6 +32,7 @@ public class RegisterActivity extends AppCompatActivity implements RegisterView 
             String contrasena = passwordEditText.getText().toString();
             presenter.register(correo, contrasena);
         });
+        backButton.setOnClickListener(v -> finish());
     }
 
     @Override

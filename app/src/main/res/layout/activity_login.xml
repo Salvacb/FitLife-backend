@@ -7,6 +7,9 @@
     android:gravity="center"
     android:background="#FFFFFF">
 
+
+
+
     <EditText
         android:id="@+id/emailEditText"
         android:layout_width="match_parent"
@@ -39,5 +42,20 @@
         android:layout_height="wrap_content"
         android:text="Registrarse"
         android:layout_marginTop="16dp" />
+
+    <Button
+        android:id="@+id/forgotPasswordButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="¿Olvidaste tu contraseña?"
+        android:layout_marginTop="16dp" />
+
+    <Button
+        android:id="@+id/backButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Volver"
+        android:layout_marginTop="8dp" />
+
 
 </LinearLayout>
