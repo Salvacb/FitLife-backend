@@ -8,8 +8,8 @@ com/fitlife/servlets/CompletarDesafioServlet.class
 com/fitlife/classes/Rutina.class
 com/fitlife/servlets/LogoutServlet.class
 com/fitlife/servlets/ListarProgresosServlet.class
-com/fitlife/servlets/MisDesafiosServlet.class
 com/fitlife/enums/NivelActividad.class
+com/fitlife/servlets/MisDesafiosServlet.class
 com/fitlife/classes/Usuario.class
 com/fitlife/Main.class
 com/fitlife/servlets/VerRutinaActualServlet.class
